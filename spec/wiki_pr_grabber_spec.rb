@@ -5,16 +5,14 @@ describe WikiPrGrabber do
   describe '#grab_pr_tables' do
     it 'works on single table case' do
       VCR.use_cassette "single table page" do
-        page = HTTPClient.new.get("http://www.ssbwiki.com/Alabama_Power_Rankings").body
-        doc = Nokogiri::HTML.parse page
-        expect(subject.grab_pr_tables(doc).size).to eql 1
+        url = "http://www.ssbwiki.com/Alabama_Power_Rankings"
+        expect(subject.grab_pr_tables(url).size).to eql 1
       end
     end
     it 'works on multi table case' do
       VCR.use_cassette "multi table page" do
-        page = HTTPClient.new.get("http://www.ssbwiki.com/Colorado_Power_Rankings").body
-        doc = Nokogiri::HTML.parse page
-        expect(subject.grab_pr_tables(doc).size).to eql 5
+        url = "http://www.ssbwiki.com/Colorado_Power_Rankings"
+        expect(subject.grab_pr_tables(url).size).to eql 5
       end
     end
   end
