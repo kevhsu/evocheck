@@ -1,2 +1,4 @@
 # evocheck
 Given a list of players, get notable players each player will face.
+
+Look at script/sample.rb to see the runpath.
