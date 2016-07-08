@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'httpclient'
 require 'set'
+require 'json'
 
 class WikiPrGrabber
   BASE_URL = "http://www.ssbwiki.com/Category:American_Power_Rankings"
@@ -21,8 +22,16 @@ class WikiPrGrabber
 
   def get_all_players
     ret_val = {}
-    grab_ranking_links.each do |link|
-      ret_val.merge!(get_players_from_link(link))
+    pr_file = File.expand_path('../../tmp/wiki_pr.json', __FILE__)
+    if File.exists?(pr_file)
+      ret_val = JSON.parse(File.read(pr_file))
+    else
+      grab_ranking_links.each do |link|
+        ret_val.merge!(get_players_from_link(link))
+      end
+      File.open(pr_file, "w") do |f|
+        f.write(ret_val.to_json)
+      end
     end
     ret_val
   end
