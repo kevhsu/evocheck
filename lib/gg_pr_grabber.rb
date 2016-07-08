@@ -29,6 +29,3 @@ class GgPrGrabber
     ranking_pages = doc.css("div.gg-card/a").map{|card| BASE_URL + card['href']}
   end
 end
-
-g = GgPrGrabber.new
-puts g.get_all_ranking_urls
