@@ -19,18 +19,36 @@ class WikiPrGrabber
     ret_val
   end
 
+  def get_all_players
+    ret_val = {}
+    grab_ranking_links.each do |link|
+      ret_val.merge!(get_players_from_link(link))
+    end
+    ret_val
+  end
+
+  def get_players_from_link(pr_link)
+    ret_val = {}
+    grab_pr_tables(pr_link).each do |table|
+      ret_val.merge!(parse_table(table))
+    end
+    ret_val
+  end
+
   # return a map of players to ranks
   def parse_table(table)
     ret_val = {}
     rows = table.xpath('//tr')
     rows.drop(1).each do |row|
-      name = row.at_xpath('td[2]').content.strip
-      ret_val[name] = row.at_xpath('td[1]').content.strip
+      if row.at_xpath('td[2]') && row.at_xpath('td[1]')
+        name = row.at_xpath('td[2]').content.strip 
+        ret_val[name] = row.at_xpath('td[1]').content.strip
+      end
     end
     ret_val
   end
 
-  # doc should be a nokogiri parsed pr page
+  # doc should be a link to a pr_page
   def grab_pr_tables(pr_link)
     doc = Nokogiri::HTML.parse(@http_client.get(pr_link).body)
     ret_val = Set.new
@@ -41,7 +59,8 @@ class WikiPrGrabber
       potential_heading = base.parent.next_element
       potential_table = potential_heading.next_element
       while(potential_heading.matches?("h3") && potential_table.matches?("table.wikitable")) do
-        ret_val << [potential_heading.content.strip, potential_table]
+        #ret_val << [potential_heading.content.strip, potential_table]
+        ret_val << potential_table
         potential_heading = potential_table.next_element
         potential_table = potential_heading.next_element
       end
