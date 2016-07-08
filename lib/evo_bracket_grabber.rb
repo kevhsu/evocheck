@@ -24,14 +24,19 @@ class EvoBracketGrabber
   def grab_player_names(bracket_link)
     doc = Nokogiri::HTML.parse(@http_client.get(bracket_link).body)
     # the gsub takes care of non breaking spaces...
-    players = doc.css("div.match-1x//div.player-handle").map{ |player| player.content.strip.gsub(/\p{Space}/, '')}.to_set
+    players = doc.css("div.match-1x//div.player-handle").map{ |player| player.content.strip.downcase.gsub(/\p{Space}/, '')}.to_set
     players
+  end
+
+  def compare_list_to_all_brackets(base_list, pr_list)
+    bracket_links.each do |link|
+      compare_list_to_bracket(link, base_list, pr_list)
+    end
   end
 
   def compare_list_to_bracket(bracket_link, base_list, pr_list)
     bracket_players = grab_player_names(bracket_link)
     base_intersection = bracket_players & base_list
-    base_intersection.each{|player| puts player}
     unless base_intersection.empty?
       puts "#{base_intersection.to_a.join(', ')} is in #{bracket_link}" 
       pr_intersection = pr_list.keys.to_set & bracket_players
@@ -49,8 +54,3 @@ class EvoBracketGrabber
     names
   end
 end
-
-e = EvoBracketGrabber.new
-player_list = ['Vro', 'Rush', 'Qerb'].to_set
-pr_list = {"Vro" => 1, "Zoof" => 2, "Swedish" => 3}
-e.compare_list_to_bracket("http://evo2016.s3.amazonaws.com/brackets/ssbm_a606.html", player_list, pr_list)
