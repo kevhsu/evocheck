@@ -20,6 +20,7 @@ class WikiPrGrabber
     ret_val
   end
 
+  # delete the file in tmp/ to refresh PRs
   def get_all_players
     ret_val = {}
     pr_file = File.expand_path('../../tmp/wiki_pr.json', __FILE__)
