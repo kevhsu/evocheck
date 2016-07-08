@@ -50,6 +50,7 @@ class WikiPrGrabber
     rows = table.xpath('//tr')
     rows.drop(1).each do |row|
       if row.at_xpath('td[2]') && row.at_xpath('td[1]')
+        # TODO: normalize instead of simply downcasing
         name = row.at_xpath('td[2]').content.strip.downcase
         ret_val[name] = row.at_xpath('td[1]').content.strip
       end
