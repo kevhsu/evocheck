@@ -59,7 +59,7 @@ class GgPrGrabber
     ranking_name = doc.at_css('h3.heading-no-margin-bottom').content
     players = doc.css('div.gamertag-title').map{|player| player.content}
     players.each do |player|
-      ret_val[player] = ranking_name
+      ret_val[player.downcase.strip] = ranking_name
     end
     ret_val
   end
