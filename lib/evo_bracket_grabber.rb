@@ -47,7 +47,10 @@ class EvoBracketGrabber
       puts "#{base_intersection.to_a.join(', ')} is in #{bracket_link}" 
       pr_intersection =  bracket_players & pr_list.keys
       unless pr_intersection.empty?
-        puts "#{pr_intersection.to_a.join(', ')} is also in the above bracket"
+
+        pr_intersection.each do |key|
+          puts "#{key} is also in bracket. He's power ranked in #{pr_list[key]}"
+        end
       end
     end
   end
