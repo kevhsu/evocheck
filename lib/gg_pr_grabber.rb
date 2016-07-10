@@ -64,7 +64,3 @@ class GgPrGrabber
     ret_val
   end
 end
-
-g = GgPrGrabber.new
-#puts g.get_all_ranking_urls
-g.player_region_map
