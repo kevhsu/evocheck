@@ -16,3 +16,5 @@ Getting Started
 git clone <see URL>
 bundle exec
 ```
+
+MIT License
